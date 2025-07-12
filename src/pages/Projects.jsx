@@ -2,33 +2,35 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, TreePine } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import ProjectCard from "../components/projects/ProjectCard";
 import ProjectStats from "../components/projects/ProjectStats";
+import { useContractInteraction } from "@/components/contract/ContractInteraction";
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState();
   const [statusFilter, setStatusFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("projectAddress");
+
+    const {userAddress, getListedProjects } = useContractInteraction();
 
   useEffect(() => {
     loadProjects();
-  }, []);
+  }, [userAddress]);
 
   useEffect(() => {
     filterProjects();
-  }, [projects, searchTerm, statusFilter, sortBy]);
+  }, [projects, searchTerm, statusFilter, userAddress]);
 
   const loadProjects = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/sync-projects');
-      const data = await response.json();
-      setProjects(data.projects || []);
+      const data = await getListedProjects();
+      setProjects(data);
     } catch (error) {
       console.error("Error loading projects:", error);
     } finally {
@@ -36,45 +38,27 @@ export default function Projects() {
     }
   };
 
-  const filterProjects = () => {
-    let filtered = [...projects];
+const filterProjects = () => {
+  let filtered = [...projects];
 
-    // Search filter
-    if (searchTerm) {
-      filtered = filtered.filter(project => 
-        project.projectAddress.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        project.metadata?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        project.metadata?.methodology.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
+  // Search filter
+  if (searchTerm && searchTerm.trim() !== "") {
+    filtered = filtered.filter(project =>
+      project?.projectContract?.toLowerCase().includes(searchTerm.trim().toLowerCase())
+    );
+  }
 
-    // Status filter
-    if (statusFilter !== "all") {
-      filtered = filtered.filter(project => {
-        if (statusFilter === "active") return project.isApproved;
-        if (statusFilter === "inactive") return !project.isApproved;
-        return true;
-      });
-    }
+  // Status filter
+  if (statusFilter === "approved") {
+    filtered = filtered.filter(project => project.isApproved);
+  } else if (statusFilter === "validated") {
+    filtered = filtered.filter(project => project.isValidated && !project.isApproved);
+  } else if (statusFilter === "verified") {
+    filtered = filtered.filter(project => project.isVerified && !project.isApproved);
+  }
 
-    // Sort
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case "projectAddress":
-          return a.projectAddress.localeCompare(b.projectAddress);
-        case "mintPrice":
-          return 0.01 - 0.01; // Static mint price as per ProjectDetails.jsx
-        case "totalSupply":
-          return (b.creditAmount || 0) - (a.creditAmount || 0);
-        case "totalRetired":
-          return (b.totalRetired || 0) - (a.totalRetired || 0);
-        default:
-          return 0;
-      }
-    });
-
-    setFilteredProjects(filtered);
-  };
+  setFilteredProjects(filtered);
+};
 
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
@@ -93,7 +77,7 @@ export default function Projects() {
         </div>
 
         {/* Stats */}
-        {!isLoading && <ProjectStats projects={projects} />}
+        {!isLoading && <ProjectStats />}
 
         {/* Filters */}
         <div className="bg-white rounded-xl shadow-sm border p-6 mb-8">
@@ -101,7 +85,7 @@ export default function Projects() {
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
-                placeholder="Search projects..."
+                placeholder="Search projects by address."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -114,12 +98,13 @@ export default function Projects() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Approved</SelectItem>
-                <SelectItem value="inactive">Pending</SelectItem>
+                <SelectItem value="approved">Approved</SelectItem>
+                 <SelectItem value="validated">Validated</SelectItem>
+                <SelectItem value="verified">Verified</SelectItem>
               </SelectContent>
             </Select>
 
-            <Select value={sortBy} onValueChange={setSortBy}>
+            {/* <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-full lg:w-40">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
@@ -129,12 +114,12 @@ export default function Projects() {
                 <SelectItem value="totalSupply">Total Supply</SelectItem>
                 <SelectItem value="totalRetired">Total Retired</SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
           </div>
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-2">
           {isLoading ? (
             Array(6).fill(0).map((_, index) => (
               <div key={index} className="bg-white rounded-xl shadow-sm border p-6">
@@ -154,7 +139,14 @@ export default function Projects() {
             ))
           ) : filteredProjects.length > 0 ? (
             filteredProjects.map((project) => (
-              <ProjectCard key={project.projectAddress} project={project} />
+                <Link
+                  key={project.projectContract}
+                  to={`/ProjectDetails/${project.projectContract}`}
+                  className="block hover:shadow-lg transition-shadow duration-200"
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <ProjectCard project={project.projectContract} />
+                </Link>
             ))
           ) : (
             <div className="col-span-full text-center py-16">

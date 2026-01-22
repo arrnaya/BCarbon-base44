@@ -11,6 +11,7 @@ import MyAccount from "./MyAccount";
 import ValidateCertificate from "./ValidateCertificate";
 import Login from './Login.jsx';
 import Register from './Ragister.jsx';
+import RoleManagement from './admin/RoleManagement.jsx';
 
 // Page mapping
 const PAGES = {
@@ -20,7 +21,8 @@ const PAGES = {
   Trade,
   ValidateCertificate,
   Administration,
-  MyAccount
+  MyAccount,
+  RoleManagement
 };
 
 // Derive page name from current URL
@@ -50,16 +52,20 @@ function PagesContent() {
       <Routes>
         {/* <Route path="/" element={<Home />} />
         <Route path="/Home" element={<Home />} /> */}
-         <Route path="/" element={<Projects />} />
-         <Route path="/Home" element={<Projects />} />
+        <Route path="/" element={<Projects />} />
+        <Route path="/Home" element={<Projects />} />
         <Route path="/Projects" element={<Projects />} />
-       
+
 
         <Route path="/ProjectDetails/:projectContract" element={<ProjectDetails />} />
         <Route path="/Trade" element={<Trade />} />
         <Route path="/ValidateCertificate" element={<ValidateCertificate />} />
         <Route path="/Administration" element={<Administration />} />
         <Route path="/MyAccount" element={<MyAccount />} />
+
+        {/* Admin Routes */}
+        <Route path="/admin/roles" element={<RoleManagement />} />
+
         {/* login and ragistration */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

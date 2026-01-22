@@ -78,6 +78,14 @@ const adminNavigationItem = {
   description: "Admin controls"
 };
 
+// Role Management navigation item (for governance owner)
+const roleManagementItem = {
+  title: "Role Management",
+  url: "/admin/roles",
+  icon: Settings,
+  description: "Manage validators and verifiers"
+};
+
 // eslint-disable-next-line react/prop-types, no-unused-vars
 export default function Layout({ children }) {
   const location = useLocation();
@@ -102,21 +110,21 @@ export default function Layout({ children }) {
       userInfo = null;
     }
   }
-  
+
   // Check if user is authenticated (both wallet + login)
   const isAuthenticated = walletAddress && userInfo;
-  
+
   // Check if user is admin or VVB
   const isAdminOrVVB = userInfo && (userInfo.role === "gov" || userInfo.role === "vvb");
 
   // Create navigation items based on user authentication and role
   const getNavigationItems = () => {
     let items = [...publicNavigationItems];
-    
+
     // Add authenticated-only items if user is authenticated
     if (isAuthenticated) {
       items = [...items, ...authenticatedNavigationItems];
-      
+
       // Add role-specific navigation items
       if (userInfo.role === "issuer") {
         items.push(createProjectItem);
@@ -124,12 +132,12 @@ export default function Layout({ children }) {
         items.push(myAccountItem);
       }
     }
-    
+
     // Add admin item for admin/VVB roles
     if (isAdminOrVVB) {
       items.push(adminNavigationItem);
     }
-    
+
     return items;
   };
 
@@ -178,13 +186,13 @@ export default function Layout({ children }) {
       window.open(url, '_blank', 'noopener,noreferrer');
       return;
     }
-    
+
     // Allow public pages without authentication
     if (item.public) {
       navigate(url);
       return;
     }
-    
+
     // For protected pages, require authentication
     if (!walletAddress) {
       connect(async () => {
@@ -225,7 +233,7 @@ export default function Layout({ children }) {
     const interval = setInterval(async () => {
       const token = localStorage.getItem("token");
       if (!token) return;
-      
+
       try {
         const res = await fetch(`${apihost}/api/protected`, {
           headers: {
@@ -265,7 +273,7 @@ export default function Layout({ children }) {
             <div className="flex items-center space-x-3">
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
-                  <img src="https://www.bico2.org/_next/image?url=%2Fimg%2Flogo.png&w=96&q=75" className="h-7"/>
+                  <img src="https://www.bico2.org/_next/image?url=%2Fimg%2Flogo.png&w=96&q=75" className="h-7" />
                 </h1>
                 <p className="text-xs text-gray-500">Decentralized Carbon Credits</p>
               </div>
@@ -277,11 +285,10 @@ export default function Layout({ children }) {
                 <button
                   key={item.title}
                   onClick={() => handleNavClick(item.url, item)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                    !item.external && location.pathname === item.url
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${!item.external && location.pathname === item.url
                       ? "bg-green-100 text-green-700 shadow-sm"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
+                    }`}
                   style={{ background: "none", border: "none", cursor: "pointer" }}
                 >
                   <item.icon className="w-4 h-4" />
@@ -359,7 +366,7 @@ export default function Layout({ children }) {
                   Login
                 </Button>
               )}
-              
+
               {/* Mobile Nav */}
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
@@ -388,11 +395,10 @@ export default function Layout({ children }) {
                           handleNavClick(item.url, item);
                           setMobileMenuOpen(false);
                         }}
-                        className={`flex items-center justify-between p-4 rounded-lg transition-all duration-200 ${
-                          !item.external && location.pathname === item.url
+                        className={`flex items-center justify-between p-4 rounded-lg transition-all duration-200 ${!item.external && location.pathname === item.url
                             ? "bg-green-100 text-green-700"
                             : "text-gray-600 hover:bg-gray-50"
-                        }`}
+                          }`}
                         style={{ background: "none", border: "none", cursor: "pointer" }}
                       >
                         <div className="flex items-center space-x-3">

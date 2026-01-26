@@ -2,7 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { TrendingUp } from 'lucide-react';
+import { TrendingUp, Info } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
 
 const ProjectOverview = ({ project }) => {
   return (
@@ -27,18 +33,37 @@ const ProjectOverview = ({ project }) => {
             </div>
             <div className="text-sm text-gray-600">Minted Supply</div>
           </div>
-          {project.isPresale ? <div className="text-center">
-            <div className="text-sm font-bold text-red-600 disabled">
-              Retire is Disabled for presale projects
+          {project.isPresale ? (
+            <div className="text-center">
+              <div className="text-xl sm:text-2xl font-bold text-red-600 flex items-center justify-center space-x-1">
+                <span>Retire Disabled</span>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Info className="w-4 h-4 text-red-400 cursor-pointer" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>
+                      Retirement of carbon credits is not permitted for presale
+                      projects, as credits remain pending verification and
+                      approval during the pre-launch fundraising period.
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="text-sm text-gray-600">Total Retired</div>
             </div>
-            {/* <div className="text-sm text-gray-600">Total Retired</div> */}
-          </div>: 
-          <div className="text-center">
-            <div className="text-xl sm:text-2xl font-bold text-red-600">
-              {project.totalRetired ? Number(project.totalRetired).toLocaleString() : '0'} tCO<sub>2</sub>
+          ) : (
+            <div className="text-center">
+              <div className="text-xl sm:text-2xl font-bold text-red-600">
+                {project.totalRetired
+                  ? Number(project.totalRetired).toLocaleString()
+                  : '0'}{' '}
+                tCO<sub>2</sub>
+              </div>
+              <div className="text-sm text-gray-600">Total Retired</div>
             </div>
-            <div className="text-sm text-gray-600">Total Retired</div>
-          </div>}
+          )}
+
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-blue-600">
               {project.projectMintPrice ? `${project.projectMintPrice} RUSD` : '0 RUSD'}

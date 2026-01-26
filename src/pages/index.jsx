@@ -9,6 +9,7 @@ import Trade from "./Trade";
 import Administration from "./Administration";
 import MyAccount from "./MyAccount";
 import ValidateCertificate from "./ValidateCertificate";
+import Registry from "./Registry";
 import Login from './Login.jsx';
 import Register from './Ragister.jsx';
 
@@ -16,12 +17,14 @@ import Register from './Ragister.jsx';
 const PAGES = {
   Home,
   Projects,
+  Registry,
   ProjectDetails,
   Trade,
   ValidateCertificate,
   Administration,
   MyAccount
 };
+
 
 // Derive page name from current URL
 function _getCurrentPage(url) {
@@ -50,16 +53,16 @@ function PagesContent() {
       <Routes>
         {/* <Route path="/" element={<Home />} />
         <Route path="/Home" element={<Home />} /> */}
-         <Route path="/" element={<Projects />} />
-         <Route path="/Home" element={<Projects />} />
-        <Route path="/Projects" element={<Projects />} />
-       
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/registry" element={<Registry />} />
+
 
         <Route path="/ProjectDetails/:projectContract" element={<ProjectDetails />} />
-        <Route path="/Trade" element={<Trade />} />
-        <Route path="/ValidateCertificate" element={<ValidateCertificate />} />
-        <Route path="/Administration" element={<Administration />} />
-        <Route path="/MyAccount" element={<MyAccount />} />
+        <Route path="/trade" element={<Trade />} />
+        <Route path="/validatecertificate" element={<ValidateCertificate />} />
+        <Route path="/administration" element={<Administration />} />
+        <Route path="/myaccount" element={<MyAccount />} />
+
         {/* login and ragistration */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

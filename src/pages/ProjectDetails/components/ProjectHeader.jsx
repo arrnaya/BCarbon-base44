@@ -32,20 +32,26 @@ const ProjectHeader = ({ project, onOpenHoldersModal }) => {
             </Badge>
           ) : null}
 
-        {  !project.isPresale && <>
-          {project.isApproved ? (
-            <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700 border-green-200">
-              <CheckCircle2 className="w-4 h-4 mr-1" />
-              Approved
-            </Badge>
-          ) : (
-            <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-700 border-yellow-200">
-              <AlertCircle className="w-4 h-4 mr-1" />
-              Pending Approval
-            </Badge>
-          )}
+          {!project.isPresale && <>
+            {project.isApproved ? (
+              <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700 border-green-200">
+                <CheckCircle2 className="w-4 h-4 mr-1" />
+                Approved
+              </Badge>
+            ) : project.isValidated && project.isVerified ? (
+              <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700 border-green-200">
+                <CheckCircle2 className="w-4 h-4 mr-1" />
+                VERRA/GOLD STANDARD REGISTERED
+              </Badge>
+            ) : (
+              <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-700 border-yellow-200">
+                <AlertCircle className="w-4 h-4 mr-1" />
+                Pending Approval
+              </Badge>
+            )}
+
           </>
-}
+          }
           <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700 border-green-200">
             <DollarSign className="w-4 h-4 mr-1" />
             Total RUSD Collected: {project.projectRUSDBalance}

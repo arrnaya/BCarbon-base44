@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -54,7 +54,7 @@ export default function ProjectDetails() {
   // Project state
   const [project, setProject] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // User balances and credits
   const [rusdBalance, setRUSDBalance] = useState(0);
   const [retiredCredits, setRetiredCredits] = useState(0);
@@ -64,17 +64,17 @@ export default function ProjectDetails() {
   const [mintNftImage, setMintNftImage] = useState("");
   const [retireNftImage, setRetireNftImage] = useState("");
   const [projectBalances, setProjectBalances] = useState("0");
-  
+
   // Mint/Retire states
   const [mintAmount, setMintAmount] = useState("");
   const [retireAmount, setRetireAmount] = useState("");
   const [isMinting, setIsMinting] = useState(false);
   const [isRetiring, setIsRetiring] = useState(false);
-  
+
   // Role states
   const [isOwner, setIsOwner] = useState(false);
   const [isVVB, setIsVVB] = useState(false);
-  
+
   // Modal states
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showPresaleApproveModal, setShowPresaleApproveModal] = useState(false);
@@ -84,11 +84,11 @@ export default function ProjectDetails() {
   const [isApproving, setIsApproving] = useState(false);
   const [isPresaleApproving, setIsPresaleApproving] = useState(false);
   const [governancePresaleMintPrice, setGovernancePresaleMintPrice] = useState(0);
-  
+
   // Comments state
   const [comment, setComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
-  
+
   // Holders modal states
   const [holders, setHolders] = useState([]);
   const [holdersLoading, setHoldersLoading] = useState(false);
@@ -131,6 +131,8 @@ export default function ProjectDetails() {
       const data = await getListedProjectDetails(projectAddress);
       setProject(data);
 
+
+
       // Fetch withdrawal requests
       try {
         setWithdrawalRequestsLoading(true);
@@ -138,10 +140,12 @@ export default function ProjectDetails() {
         if (withdrawalResponse.ok) {
           const withdrawalData = await withdrawalResponse.json();
           setWithdrawalRequests(withdrawalData.withdrawalRequests || []);
-          data.projectRUSDBalance = withdrawalData.project.projectRUSDBalance || 0; 
+          data.projectRUSDBalance = withdrawalData.project.projectRUSDBalance || 0;
           data.isPresale = withdrawalData.project.isPresale// Update project RUSD balance
           data.presaleAmount = withdrawalData.project.presaleAmount || 0; // Update presale amount
           setProject(data);
+
+
         }
       } catch (error) {
         console.error("Error fetching withdrawal requests:", error);
@@ -485,9 +489,9 @@ export default function ProjectDetails() {
     setIsApproving(true);
     try {
       const tx = await approveAndIssueCredits(
-        project.projectContract, 
-        Number(creditAmount), 
-        Number(governancePresaleMintPrice), 
+        project.projectContract,
+        Number(creditAmount),
+        Number(governancePresaleMintPrice),
         account
       );
       if (tx.status === "success") {
@@ -739,7 +743,7 @@ export default function ProjectDetails() {
     try {
       // Call the blockchain function
 
-      const tx = await setGovernanceDecision(requestId, amount ? Number(amount) : 0, decision,  account);
+      const tx = await setGovernanceDecision(requestId, amount ? Number(amount) : 0, decision, account);
       if (tx.status === "success") {
         toast({
           variant: "default",
@@ -816,20 +820,20 @@ export default function ProjectDetails() {
         </Link>
 
         {/* Components */}
-        <ProjectHeader 
-          project={project} 
+        <ProjectHeader
+          project={project}
           projectBalances={projectBalances}
-          onOpenHoldersModal={handleOpenHoldersModal} 
+          onOpenHoldersModal={handleOpenHoldersModal}
         />
-        
+
         <ProjectOverview project={project} />
-        
+
         <ProjectInfo project={project} methodology={methodology} />
 
         {/* Withdrawal Requests Section - Show for project owner */}
-        {project && walletAddress && project.proposer && 
-          (walletAddress.toLowerCase() === project.proposer.toLowerCase() || isOwner ) && (
-            <WithdrawalRequests 
+        {project && walletAddress && project.proposer &&
+          (walletAddress.toLowerCase() === project.proposer.toLowerCase() || isOwner) && (
+            <WithdrawalRequests
               withdrawalRequests={withdrawalRequests}
               isLoading={withdrawalRequestsLoading}
               projectContract={projectContract}
@@ -838,8 +842,8 @@ export default function ProjectDetails() {
               onGovernanceDecision={handleGovernanceDecision}
             />
           )}
-        
-        <RoleActions 
+
+        <RoleActions
           isOwner={isOwner}
           isVVB={isVVB}
           project={project}
@@ -862,7 +866,7 @@ export default function ProjectDetails() {
 
         {!isOwner && !isVVB && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
-            <MintCreditsCard 
+            <MintCreditsCard
               project={project}
               mintAmount={mintAmount}
               setMintAmount={setMintAmount}
@@ -874,10 +878,10 @@ export default function ProjectDetails() {
               mintedCredits={mintedCredits}
               mintBalance={mintBalance}
               rusdBalance={rusdBalance}
-           
+
             />
-            
-            <RetireCreditsCard 
+
+            <RetireCreditsCard
               project={project}
               retireAmount={retireAmount}
               setRetireAmount={setRetireAmount}
@@ -892,8 +896,8 @@ export default function ProjectDetails() {
           </div>
         )}
 
-        {userInfo && userInfo.role !== "user" && (project.proposer.toLowerCase() === walletAddress.toLowerCase() || isVVB || isOwner )&& (
-          <CommentsSection 
+        {userInfo && userInfo.role !== "user" && (project.proposer.toLowerCase() === walletAddress.toLowerCase() || isVVB || isOwner) && (
+          <CommentsSection
             comments={project.comments}
             projectContract={project.projectContract}
             comment={comment}
@@ -905,11 +909,11 @@ export default function ProjectDetails() {
         )}
 
         {/* Withdrawal Requests Section - Show for project owner */}
-        
+
 
         {/* Modals */}
         {showHoldersModal && (
-          <HoldersModal 
+          <HoldersModal
             onClose={() => setShowHoldersModal(false)}
             holders={holders}
             holdersLoading={holdersLoading}

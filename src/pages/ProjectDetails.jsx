@@ -120,6 +120,8 @@ export default function ProjectDetails() {
       const data = await getListedProjectDetails(projectAddress);
       setProject(data);
 
+
+
       try {
         // Token ID 1 for Mint
         const mintTokenUri = data.tokenUri;
@@ -306,12 +308,12 @@ export default function ProjectDetails() {
     try {
       const tx = await approveAndIssueCredits(project.projectContract, Number(creditAmount), account);
       if (tx.status === "success") {
-         const { data: result } = await axios.put(
-        `${apihost}/project/updateprojectdetails/${project.projectContract}`,
-        {}, // empty body
-        { headers: { 'Content-Type': 'application/json' } }
-      );
-      console.log("Approval result:", result);
+        const { data: result } = await axios.put(
+          `${apihost}/project/updateprojectdetails/${project.projectContract}`,
+          {}, // empty body
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+        console.log("Approval result:", result);
         toast({
           variant: "default",
           title: "Success",
@@ -645,12 +647,12 @@ export default function ProjectDetails() {
             </div>
 
             <div className="mt-2 sm:mt-0 sm:ml-auto">
-              {project.isPresale && project.presaleAmount !== 0  ? (
+              {project.isPresale && project.presaleAmount !== 0 ? (
                 <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700 border-green-200">
                   <CheckCircle2 className="w-4 h-4 mr-1" />
-                   In Presale 
+                  In Presale
                 </Badge>
-              ) : project.isPresale && project.presaleAmount === 0 ?  (
+              ) : project.isPresale && project.presaleAmount === 0 ? (
                 <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-700 border-yellow-200">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   Presale Approval Pending
@@ -665,6 +667,11 @@ export default function ProjectDetails() {
                   <CheckCircle2 className="w-4 h-4 mr-1" />
                   Approved
                 </Badge>
+              ) : project.isValidated && project.isVerified ? (
+                <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700 border-green-200">
+                  <CheckCircle2 className="w-4 h-4 mr-1" />
+                  VERRA/GOLD STANDARD REGISTERED
+                </Badge>
               ) : (
                 <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-700 border-yellow-200">
                   <AlertCircle className="w-4 h-4 mr-1" />
@@ -672,6 +679,7 @@ export default function ProjectDetails() {
                 </Badge>
               )}
             </div>
+
 
             <div className="mt-2 sm:mt-0 sm:ml-auto">
               <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700 border-green-200">
@@ -1388,8 +1396,8 @@ export default function ProjectDetails() {
                             {/* Token ID */}
                             <td className="px-4 py-4 whitespace-nowrap">
                               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${holder.tokenId === 1
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-orange-100 text-orange-800"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-orange-100 text-orange-800"
                                 }`}>
                                 #{holder.tokenId} {holder.tokenId === 1 ? "(Mint)" : "(Retired)"}
                               </span>

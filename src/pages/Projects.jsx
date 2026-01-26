@@ -22,7 +22,7 @@ export default function Projects() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [pendingUrl, setPendingUrl] = useState(null);
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -39,7 +39,7 @@ export default function Projects() {
   const isUserAuthenticated = () => {
     const token = localStorage.getItem("token");
     if (!token) return false;
-    
+
     try {
       const decoded = jwtDecode(token);
       // Check if token is expired
@@ -73,17 +73,17 @@ export default function Projects() {
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch projects");
       }
-      
+
       const data = await response.json();
-      
+
       if (data && data.projects) {
         setProjects(data.projects);
         setFilteredProjects(data.projects);
-        
+
         if (data.pagination) {
           setTotalPages(data.pagination.totalPages);
           setTotalProjects(data.pagination.totalProjects);
@@ -140,18 +140,18 @@ export default function Projects() {
   const getPageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
-    
+
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
+
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
-    
+
     for (let i = startPage; i <= endPage; i++) {
       pages.push(i);
     }
-    
+
     return pages;
   };
 
@@ -167,12 +167,12 @@ export default function Projects() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Carbon Credit Projects</h1>
               <p className="text-gray-600">
-                Discover and invest in verified carbon reduction projects 
+                Discover and invest in verified carbon reduction projects
                 ({totalProjects} total projects)
               </p>
             </div>
           </div>
-          
+
           {/* Authentication Notice for Non-authenticated Users */}
           {!isFullyAuthenticated && (
             <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
@@ -185,7 +185,7 @@ export default function Projects() {
                     Limited Access Mode
                   </h3>
                   <p className="text-sm text-amber-700 mb-3">
-                    You're viewing projects in read-only mode. To access full project details, 
+                    You're viewing projects in read-only mode. To access full project details,
                     mint credits, trade, or interact with projects, please login and connect your wallet.
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -274,10 +274,10 @@ export default function Projects() {
             ))
           ) : filteredProjects.length > 0 ? (
             filteredProjects.map((project) => (
-              <ProjectCard 
-                key={project.projectContract} 
+              <ProjectCard
+                key={project.projectContract}
                 project={project.projectContract}
-                isAuthenticated={isFullyAuthenticated}
+                isAuthenticated={true}
               />
             ))
           ) : (

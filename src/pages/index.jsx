@@ -51,10 +51,11 @@ function PagesContent() {
     <Layout currentPageName={currentPage}>
       <ScrollToTop />
       <Routes>
-        {/* <Route path="/" element={<Home />} />
-        <Route path="/Home" element={<Home />} /> */}
+        <Route path="/" element={<Projects />} />
+        <Route path="/home" element={<Projects />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/registry" element={<Registry />} />
+
 
 
         <Route path="/ProjectDetails/:projectContract" element={<ProjectDetails />} />

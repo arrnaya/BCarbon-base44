@@ -471,6 +471,11 @@ export default function ProjectDetails() {
           tokenId: 2, // Assuming tokenId 2 for retire
           image: retireNftImage || fallbackImage,
         };
+        toast({
+          variant: "default",
+          title: "Success",
+          description: `Credits retired!`,
+        });
         const response = await fetch(`${apihost}/user/store-retired-nft`, {
           method: 'POST',
           headers: {
@@ -482,11 +487,7 @@ export default function ProjectDetails() {
           const data = await response.json();
           console.log('Retired NFT stored successfully:', data);
         }
-        toast({
-          variant: "default",
-          title: "Success",
-          description: `Credits retired!`,
-        });
+        
         setTimeout(() => loadProject(project.projectContract), 3000);
       }
       else {

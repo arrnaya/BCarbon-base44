@@ -413,16 +413,17 @@ export default function ProjectDetails() {
           tokenId: 2,
           image: retireNftImage || fallbackImage,
         };
-        await fetch(`${apihost}/user/store-retired-nft`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(nftData),
-        });
         toast({
           variant: "default",
           title: "Success",
           description: `Credits retired!`,
         });
+        await fetch(`${apihost}/user/store-retired-nft`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(nftData),
+        });
+     
         setTimeout(() => loadProject(project.projectContract), 3000);
       } else {
         toast({

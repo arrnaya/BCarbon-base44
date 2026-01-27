@@ -7,9 +7,9 @@ export const projectFactory = "0x95A094dE9aef31Ec91660778EDBC2818470fa7fd";
 export const BCO2DAO = "0x25e3C160E6415ee9791E7465E9841465D0747CF4"
 export const BCO2Factory = "0xe47Ff9BD6B36b33144FA6473E2321b5450D5e0d5"
 
-export const apihost = "http://localhost:4090"
+// export const apihost = "http://localhost:4090"
 //https://bico2-backend-api.aigb.io
-// export const apihost = "https://backend-api.bico2.org"
+export const apihost = "https://backend-api.bico2.org"
 
 
 export const uriTokenOne = 'https://ipfs.io/ipfs/bafkreihzb5t6ppevzlkkueyoo5b6pcx2n7aph623qz2mxpoitjlxjj2x4a?filename=1.json'
